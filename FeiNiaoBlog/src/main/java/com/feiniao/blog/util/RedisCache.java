@@ -116,7 +116,6 @@ public class RedisCache implements Cache {
     @Override
     public void evict(Object key) {
         // TODO Auto-generated method stub
-        System.out.println("del key");
         final String keyf = key.toString();
         redisTemplate.execute(new RedisCallback<Long>() {
             public Long doInRedis(RedisConnection connection)
@@ -129,7 +128,6 @@ public class RedisCache implements Cache {
     @Override
     public void clear() {
         // TODO Auto-generated method stub
-        System.out.println("clear key");
         redisTemplate.execute(new RedisCallback<String>() {
             public String doInRedis(RedisConnection connection)
                     throws DataAccessException {

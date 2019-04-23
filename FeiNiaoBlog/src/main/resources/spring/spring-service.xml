@@ -23,6 +23,7 @@
     <bean id="commentService" class="com.feiniao.blog.service.impl.CommentServiceImpl"/>
     <bean id="noticeService" class="com.feiniao.blog.service.impl.NoticeServiceImpl"/>
     <bean id="menuService" class="com.feiniao.blog.service.impl.MenuServiceImpl"/>
+    <bean id="readerService" class="com.feiniao.blog.service.impl.ReaderServiceImpl"/>
     <bean id="functions" class="com.feiniao.blog.util.Functions"/>
     <bean id="redisUtil" class="com.feiniao.blog.util.RedisUtil"/>
 

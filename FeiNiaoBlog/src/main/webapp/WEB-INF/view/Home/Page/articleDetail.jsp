@@ -83,31 +83,15 @@
                             <div class="shang-p">
                                 <div class="shang-empty"><span></span></div>
                                 <span class="shang-s">
-                                    <a onclick="PaymentUtils.show();" style="cursor:pointer">赏</a>
+                                    <a style="cursor:pointer">赏</a>
                                 </span>
                             </div>
                             <div class="share-sd">
-                                        <span class="share-s" style="margin-top: 25px!important;">
-                                            <a href="javascript:void(0)" id="share-s" title="分享">
-                                                <i class="fa fa-share-alt"></i>分享
-                                            </a>
-                                        </span>
-                                <div id="share">
-                                    <ul class="bdsharebuttonbox bdshare-button-style1-16" data-bd-bind="1503997585792">
-                                        <li><a title="更多" class="bds_more fa fa-plus-square" data-cmd="more"
-                                               onclick="return false;" href="#"></a></li>
-                                        <li><a title="分享到QQ空间" class="fa fa-qq" data-cmd="qzone" onclick="return false;"
-                                               href="#"></a></li>
-                                        <li><a title="分享到新浪微博" class="fa fa-weibo" data-cmd="tsina"
-                                               onclick="return false;" href="#"></a></li>
-                                        <li><a title="分享到腾讯微博" class="fa fa-pinterest-square" data-cmd="tqq"
-                                               onclick="return false;" href="#"></a></li>
-                                        <li><a title="分享到人人网" class="fa fa-renren" data-cmd="renren"
-                                               onclick="return false;" href="#"></a></li>
-                                        <li><a title="分享到微信" class="fa fa-weixin" data-cmd="weixin"
-                                               onclick="return false;" href="#"></a></li>
-                                    </ul>
-                                </div>
+                                <span class="share-s">
+                                    <a href="javascript:void(0)" id="share-s" title="分享">
+                                        <i class="fa fa-share-alt"></i>分享
+                                    </a>
+                                </span>
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -295,56 +279,55 @@
                            style="">取消回复</a>
                     </h3>
                     <form id="comment_form" method="post">
-                        <c:if test="${sessionScope.user!=null}">
-                            <div class="user_avatar">
-                                <img alt="言曌"
-                                     src="${sessionScope.user.userAvatar}"
-                                     class="avatar avatar-64 photo" height="64" width="64">
-                                登录者：${sessionScope.user.userNickname}
-                                <br> <a href="javascript:void(0)" onclick="logout()">登出</a>
-                                <input type="hidden" name="commentRole" value="1">
-                                <input type="hidden" name="commentAuthorName"
-                                       value="${sessionScope.user.getUserNickname()}">
-                                <input type="hidden" name="commentAuthorEmail"
-                                       value="${sessionScope.user.getUserEmail()}">
-                                <input type="hidden" name="commentAuthorUrl" value="${sessionScope.user.getUserUrl()}">
-                            </div>
-                        </c:if>
+                        <c:choose>
+                            <c:when test="${sessionScope.user!=null}">
+                                <div class="user_avatar">
+                                    <img alt="飞鸟博客"
+                                         src="${sessionScope.user.userAvatar}"
+                                         class="avatar avatar-64 photo" height="64" width="64">
+                                    登录者：${sessionScope.user.userNickname}
+                                    <br> <a href="javascript:void(0)" onclick="logout()">登出</a>
+                                    <input type="hidden" name="commentRole" value="1">
+                                    <input type="hidden" name="commentAuthorName" id="commentAuthorName"
+                                           value="${sessionScope.user.userNickname}">
+                                    <input type="hidden" name="commentAuthorAvatar" id="commentAuthorAvatar"
+                                           value="${sessionScope.user.userAvatar}">
+                                    <input type="hidden" name="commentAuthorEmail"
+                                           value="${sessionScope.user.userEmail}">
+                                    <input type="hidden" name="commentAuthorUrl" value="${sessionScope.user.userUrl}">
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <c:if test="${sessionScope.reader!=null}">
+                                    <div class="user_avatar">
+                                        <img alt="飞鸟博客"
+                                             src="${sessionScope.reader.readerAvatar}"
+                                             class="avatar avatar-64 photo" height="64" width="64">
+                                        登录者：${sessionScope.reader.readerName}
+                                        <input type="hidden" name="commentRole" value="0">
+                                        <input type="hidden" name="commentAuthorName" id="commentAuthorName"
+                                               value="${sessionScope.reader.readerName}">
+                                        <input type="hidden" name="commentAuthorAvatar" id="commentAuthorAvatar"
+                                               value="${sessionScope.reader.readerAvatar}">
+                                        <input type="hidden" name="commentAuthorEmail"
+                                               value="${sessionScope.reader.readerEmail}">
+                                    </div>
+                                </c:if>
+                            </c:otherwise>
+                        </c:choose>
+
                         <p class="comment-form-comment">
                             <textarea id="comment" name="commentContent" rows="4" tabindex="1" required></textarea>
                         </p>
                         <div id="comment-author-info">
                             <input type="hidden" name="commentPid" value="0">
                             <input type="hidden" name="commentPname" value="">
-                            <c:if test="${sessionScope.user == null}">
-                                <input type="hidden" name="commentRole" value="0">
-                                <p class="comment-form-author">
-                                    <label for="author_name">
-                                        昵称<span class="required">*</span>
-                                    </label>
-                                    <input type="text" name="commentAuthorName" id="author_name" class="" value=""
-                                           tabindex="2" required>
-                                </p>
-                                <p class="comment-form-email">
-                                    <label for="author_email">
-                                        邮箱<span class="required">*</span>
-                                    </label>
-                                    <input type="email" name="commentAuthorEmail" id="author_email" class="" value=""
-                                           tabindex="3" required>
-                                </p>
-                                <p class="comment-form-url">
-                                    <label for="author_url">网址</label>
-                                    <input type="url" name="commentAuthorUrl" id="author_url" class="" value=""
-                                           tabindex="4">
-                                </p>
-                            </c:if>
                         </div>
                         <div class="clear"></div>
                         <p class="form-submit">
                             <input id="submit" name="submit" type="submit" tabindex="5" value="提交评论">
                             <input type="hidden" name="commentArticleId"
                                    value="${article.articleId}" id="article_id">
-                            <input type="hidden" name="commentPid" id="comment_pid" value="0">
                         </p>
                     </form>
                 </div>

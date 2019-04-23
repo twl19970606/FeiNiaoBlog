@@ -22,7 +22,7 @@
     <style type="text/css">
         body{
             font-family: "Microsoft YaHei", Helvetica, Arial, Lucida Grande, Tahoma, sans-serif;
-            background: url(http://blogcdn.feiniao.com/img/loginBg.jpg);
+            background: url(http://localhost:8080/img/back.jpg);
             width:100%;
             height:100%;
         }
@@ -45,7 +45,7 @@
         }
 
         #backtoblog a, #nav a {
-            color: #fff !important;
+            color: #000000;
         }
 
     </style><meta name='robots' content='noindex,follow' />
@@ -61,52 +61,34 @@
 <body class="login login-action-login wp-core-ui  locale-zh-cn">
 <div id="login">
     <h1><a href="/" title="欢迎您光临本站！" tabindex="-1">${options.optionSiteTitle}</a></h1>
-    <%
-         String username = "";
-         String password = "";
-         //获取当前站点的所有Cookie
-         Cookie[] cookies = request.getCookies();
-         for (int i = 0; i < cookies.length; i++) {//对cookies中的数据进行遍历，找到用户名、密码的数据
-             if ("username".equals(cookies[i].getName())) {
-                    username = cookies[i].getValue();
-             } else if ("password".equals(cookies[i].getName())) {
-                 password = cookies[i].getValue();
-             }
-         }
-         %>
     <form name="loginForm" id="loginForm"  method="post">
         <p>
-            <label for="user_login">用户名或电子邮件地址<br />
-                <input type="text" name="username" id="user_login" class="input" value="<%=username%>" size="20" required/></label>
+            <label for="reader_email">电子邮箱：<br />
+                <input type="text" name="email" id="reader_email" class="input" size="20" required/></label>
         </p>
         <p>
-            <label for="user_pass">密码<br />
-                <input type="password" name="password" id="user_pass" class="input" value="<%=password%>" size="20" required/>
+            <label for="reader_name">用户名：<br />
+                <input type="text" name="name" id="reader_name" class="input" size="20" required/></label>
+        </p>
+        <p>
+            <label for="reader_pass">密码：<br />
+                <input type="password" name="password" id="reader_pass" class="input" size="20" required/>
             </label>
         </p>
-        <p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="1" checked /> 记住密码</label></p>
-        <p class="submit">
-            <input type="button" name="wp-submit" id="submit-btn" class="button button-primary button-large" value="登录" />
+        <p>
+            <label for="reader_repass">确认密码：<br />
+                <input type="password" name="repassword" id="reader_repass" class="input" size="20" required/>
+            </label>
+        </p>
+        <p class="submit clearfix">
+            <input type="button" name="wp-submit" id="submit-btn" class="button button-primary button-large" value="注册" />
+        </p>
+        <p>
+            <a href="/reader/login" style="text-decoration:none;">立即登录</a>
         </p>
     </form>
 
-
-
-    <script type="text/javascript">
-        function wp_attempt_focus(){
-            setTimeout( function(){ try{
-                d = document.getElementById('user_login');
-                d.focus();
-                d.select();
-            } catch(e){}
-            }, 200);
-        }
-
-        wp_attempt_focus();
-        if(typeof wpOnload=='function')wpOnload();
-    </script>
-
-    <p id="backtoblog"><a href="/">&larr; 返回到风吟博客</a></p>
+    <p id="backtoblog"><a href="/">&larr; 返回飞鸟博客</a></p>
 
 </div>
 
@@ -117,30 +99,48 @@
 <script type="text/javascript">
 
 
-    <%--登录验证--%>
+    <%--注册验证--%>
     $("#submit-btn").click(function () {
-        var user = $("#user_login").val();
-        var password = $("#user_pass").val();
-        if(user=="") {
+        var email = $("#reader_email").val();
+        var password = $("#reader_pass").val();
+        var name = $("#reader_name").val();
+        var rePassword = $("#reader_repass").val();
+
+        if(email=="") {
+            alert("电子邮箱不可为空!");
+            $("#reader_email").focus();
+        }
+        else if(!email.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/)){
+            alert("邮箱格式不正确，请重新输入!");
+            $("#reader_email").focus();
+        }
+        else if(name==""){
             alert("用户名不可为空!");
-        } else if(password==""){
-            alert("密码不可为空!");
-        } else {
+            $("#reader_name").focus();
+        }else if(password==""){
+            alert("密码不可为空！");
+            $("#reader_pass").focus();
+        }else if(password!=rePassword){
+            alert("前后密码不一致,请重新输入!");
+            $("#reader_pass").focus();
+        }
+        else {
             $.ajax({
                 async: false,//同步，待请求完毕后再执行后面的代码
                 type: "POST",
-                url: '/loginVerify',
+                url: '/reader/registerVerify',
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
                 data: $("#loginForm").serialize(),
                 dataType: "json",
                 success: function (data) {
-                    if(data.code==0) {
-                        alert(data.msg);
+                    if(data.success==false) {
+                        alert(data.message);
                     } else {
-                        window.location.href="/admin";
+                        alert("注册成功，请登录!");
+                        window.location.href="/reader/login";
 
-                    }
-                },
+            }
+        },
                 error: function () {
                     alert("数据获取失败")
                 }

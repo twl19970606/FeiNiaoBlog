@@ -22,7 +22,7 @@
     <style type="text/css">
         body{
             font-family: "Microsoft YaHei", Helvetica, Arial, Lucida Grande, Tahoma, sans-serif;
-            background: url(http://blogcdn.feiniao.com/img/loginBg.jpg);
+            background: url(http://localhost:8080/img/back.jpg);
             width:100%;
             height:100%;
         }
@@ -45,7 +45,7 @@
         }
 
         #backtoblog a, #nav a {
-            color: #fff !important;
+            color: #000000;
         }
 
     </style><meta name='robots' content='noindex,follow' />
@@ -106,10 +106,9 @@
         if(typeof wpOnload=='function')wpOnload();
     </script>
 
-    <p id="backtoblog"><a href="/">&larr; 返回到风吟博客</a></p>
+    <p id="backtoblog"><a href="/">&larr; 返回飞鸟博客</a></p>
 
 </div>
-
 
 <div class="clear"></div>
 

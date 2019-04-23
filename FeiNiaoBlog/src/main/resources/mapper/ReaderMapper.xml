@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.feiniao.blog.mapper.ReaderMapper">
+    <resultMap id="BaseResultMap" type="com.feiniao.blog.entity.Reader">
+        <id column="reader_id" property="readerId" jdbcType="INTEGER"/>
+        <result column="reader_name" property="readerName" jdbcType="VARCHAR"/>
+        <result column="reader_pass" property="readerPass" jdbcType="VARCHAR"/>
+        <result column="reader_email" property="readerEmail" jdbcType="VARCHAR"/>
+        <result column="reader_avatar" property="readerAvatar" jdbcType="VARCHAR"/>
+        <result column="reader_status" property="readerStatus" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="tb">reader</sql>
+
+    <sql id="Base_Column_List">
+    reader_id, reader_name, reader_pass, reader_email, reader_avatar, reader_status
+    </sql>
+
+    <select id="getReaderById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from <include refid="tb"/>
+        where reader_id = #{readerId,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from
+        <include refid="tb"/>
+        where reader_id = #{readerId,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.feiniao.blog.entity.Reader" useGeneratedKeys="true" keyProperty="readerId">
+        insert into
+        <include refid="tb"/>
+        (reader_id, reader_name, reader_pass,
+        reader_email, reader_avatar, reader_status)
+        values (#{readerId,jdbcType=INTEGER}, #{readerName,jdbcType=VARCHAR}, #{readerPass,jdbcType=VARCHAR},
+        #{readerEmail,jdbcType=VARCHAR},#{readerAvatar,jdbcType=VARCHAR}, #{readerStatus,jdbcType=INTEGER})
+    </insert>
+
+    <update id="update" parameterType="com.feiniao.blog.entity.Reader">
+        update
+        <include refid="tb"/>
+        <set>
+            <if test="readerName != null">reader_name = #{readerName,jdbcType=VARCHAR},</if>
+            <if test="readerPass != null">reader_pass = #{readerPass,jdbcType=VARCHAR},</if>
+            <if test="readerEmail != null">reader_email = #{readerEmail,jdbcType=VARCHAR},</if>
+            <if test="readerAvatar != null">reader_avatar = #{readerAvatar,jdbcType=VARCHAR},</if>
+            <if test="readerStatus != null">reader_status = #{readerStatus,jdbcType=INTEGER},</if>
+        </set>
+        where reader_id = #{readerId,jdbcType=INTEGER}
+    </update>
+
+    <!--用户列表查询-->
+    <select id="listReader" parameterType="com.feiniao.blog.entity.Reader"
+            resultType="com.feiniao.blog.entity.Reader">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tb"/>
+        ORDER BY `reader_status` ASC
+    </select>
+
+    <!--根据用户名或邮箱获得用户-->
+    <select id="getReaderByNameOrEmail" parameterType="String" resultType="com.feiniao.blog.entity.Reader">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tb"/>
+        <where>
+            reader_name=#{value} OR reader_email=#{value}
+        </where>
+        AND reader_status>0
+        limit 1
+    </select>
+
+    <!--根据用户名查用户-->
+    <select id="getReaderByName" parameterType="String" resultType="com.feiniao.blog.entity.Reader">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tb"/>
+        <where>
+            reader_name=#{value}
+        </where>
+        limit 1
+    </select>
+
+    <!--根据Email查用户-->
+    <select id="getReaderByEmail" parameterType="String" resultType="com.feiniao.blog.entity.Reader">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="tb"/>
+        <where>
+            reader_email=#{value}
+        </where>
+        limit 1
+    </select>
+
+
+
+</mapper>

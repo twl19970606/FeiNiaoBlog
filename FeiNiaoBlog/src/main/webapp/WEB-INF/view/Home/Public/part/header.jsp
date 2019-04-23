@@ -12,11 +12,20 @@
         <div class="top-nav">
             <div class="user-login">
                 <c:choose>
-                    <c:when test="${sessionScope.user==null}">
+                    <c:when test="${sessionScope.reader==null&&sessionScope.user==null}">
                         <a href="/reader/login">登录</a>
                     </c:when>
                     <c:otherwise>
-                        <a href="/admin">进入后台</a>
+                        <c:choose>
+                            <c:when test="${sessionScope.user==null}">
+                                <a href="#"><img src="${sessionScope.reader.readerAvatar}" width="20px"
+                                                 height="20px">${sessionScope.reader.readerName}</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="#"><img src="${sessionScope.user.userAvatar}" width="20px"
+                                                 height="20px">${sessionScope.user.userName}</a>
+                            </c:otherwise>
+                        </c:choose>
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -24,8 +33,8 @@
                 <ul id="menu-topmenu" class="top-menu">
                     <c:forEach items="${menuList}" var="m">
                         <li class="menu-item">
-                        <c:if test="${m.menuLevel==1}">
-                                <a href="${m.menuUrl}" >
+                            <c:if test="${m.menuLevel==1}">
+                                <a href="${m.menuUrl}">
                                     <i class="${m.menuIcon}"></i>
                                     <span class="font-text">${m.menuName}&nbsp;</span>&nbsp;
                                 </a>
@@ -78,7 +87,8 @@
                                             <c:forEach items="${allCategoryList}" var="cate">
                                                 <c:if test="${cate.categoryPid==category.categoryId}">
                                                     <li>
-                                                        <a href="/category/${cate.categoryId}" target="_blank">${cate.categoryName}</a>
+                                                        <a href="/category/${cate.categoryId}"
+                                                           target="_blank">${cate.categoryName}</a>
                                                     </li>
                                                 </c:if>
                                             </c:forEach>
@@ -106,7 +116,8 @@
     </div><!-- #menu-box -->
     <%--主要菜单 satrt--%>
 
-</header><!-- #masthead -->
+</header>
+<!-- #masthead -->
 <%--导航 end start--%>
 
 <%--搜索框 start--%>
@@ -114,7 +125,7 @@
     <div class="searchbar">
         <form method="get" id="searchform" action="/search" accept-charset="UTF-8">
             <span>
-                <input type="text" value="" name="keywords" id="s" placeholder="输入搜索内容"required="">
+                <input type="text" value="" name="keywords" id="s" placeholder="输入搜索内容" required="">
                 <button type="submit" id="searchsubmit">搜索</button>
             </span>
         </form>

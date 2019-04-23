@@ -249,7 +249,7 @@
         SET article_comment_count=
         (
         SELECT count(*) FROM `comment`
-        WHERE article.article_id=comment.comment_article_id AND comment_status=1
+        WHERE article.article_id=comment.comment_article_id
         )
         WHERE article_id=#{articleId}
     </update>

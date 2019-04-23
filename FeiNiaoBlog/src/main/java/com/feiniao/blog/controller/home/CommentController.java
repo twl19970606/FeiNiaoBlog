@@ -41,7 +41,7 @@ public class CommentController {
         } else {
             comment.setCommentRole(Role.VISITOR.getValue());
         }
-        comment.setCommentAuthorAvatar(Functions.getGravatar(comment.getCommentAuthorEmail()));
+       // comment.setCommentAuthorAvatar(Functions.getGravatar(comment.getCommentAuthorEmail()));
         commentService.insertComment(comment);
 
         //更新文章的评论数

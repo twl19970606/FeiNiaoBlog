@@ -1,20 +1,25 @@
 package com.feiniao.blog.controller.home;
 
+import com.feiniao.blog.dto.Response;
 import com.feiniao.blog.entity.*;
 import com.feiniao.blog.enums.NoticeStatus;
 import com.feiniao.blog.service.*;
+import com.feiniao.blog.util.MD5Util;
 import com.github.pagehelper.PageInfo;
 import com.feiniao.blog.entity.Link;
-import com.feiniao.blog.entity.*;
 import com.feiniao.blog.enums.ArticleStatus;
 import com.feiniao.blog.enums.LinkStatus;
-import com.feiniao.blog.service.*;
 import com.feiniao.blog.util.RedisUtil;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,6 +40,9 @@ public class IndexController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private ReaderService readerService;
 
     @RequestMapping(value = {"/", "/article"})
     public String index(@RequestParam(required = false, defaultValue = "1") Integer pageIndex,
@@ -122,6 +130,91 @@ public class IndexController {
     public String registerPage() {
         return "Home/Page/reader_register";
     }
+
+    /**
+     * 用户注册
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("/reader/registerVerify")
+    @ResponseBody
+    public String register(HttpServletRequest request, HttpServletResponse response) {
+        String email = request.getParameter("email");
+        String name = request.getParameter("name");
+        String password = request.getParameter("password");
+        Response result = null;
+        if(readerService.getReaderByEmail(email)!=null){
+            result = Response.no("该邮箱已被注册，请登录!");
+        }else if(readerService.getReaderByName(name)!=null){
+            result = Response.no("注册失败，用户名已存在！");
+        }else{
+            result = Response.yes();
+            Reader reader = new Reader();
+            reader.setReaderName(name);
+            reader.setReaderPass(MD5Util.getMD5String(password));
+            reader.setReaderStatus(1);
+            reader.setReaderEmail(email);
+            reader.setReaderAvatar("/img/avatar.jpg");
+            readerService.insertReader(reader);
+        }
+        String res = new JSONObject(result).toString();
+        return res;
+    }
+
+    /**
+     * 登录验证
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/reader/loginVerify",method = RequestMethod.POST)
+    @ResponseBody
+    public String loginVerify(HttpServletRequest request, HttpServletResponse response)  {
+        String readerName = request.getParameter("readerName");
+        String readerPass = request.getParameter("readerPass");
+        String rememberme = request.getParameter("rememberme");
+        Reader reader = readerService.getReaderByNameOrEmail(readerName);
+        Response result = null;
+        if(reader==null) {
+            result = Response.no("用户不存在！");
+        } else if(!reader.getReaderPass().equals(MD5Util.getMD5String(readerPass))) {
+            result = Response.no("密码错误，请重新输入！");
+        } else {
+            //登录成功
+            result = Response.yes();
+            //添加session
+            request.getSession().setAttribute("reader", reader);
+            //添加cookie
+            if(rememberme!=null) {
+                //创建两个Cookie对象
+                Cookie nameCookie = new Cookie("readerName", readerName);
+                //设置Cookie的有效期为3天
+                nameCookie.setMaxAge(60 * 60 * 24 * 3);
+                Cookie pwdCookie = new Cookie("readerPass", readerPass);
+                pwdCookie.setMaxAge(60 * 60 * 24 * 3);
+                response.addCookie(nameCookie);
+                response.addCookie(pwdCookie);
+            }
+
+
+        }
+        String res = new JSONObject(result).toString();
+        return res;
+    }
+
+    /**
+     * 退出登录
+     *
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/reader/logout")
+    public String logout(HttpSession session)  {
+        return  null;
+    }
+
 }
 
 

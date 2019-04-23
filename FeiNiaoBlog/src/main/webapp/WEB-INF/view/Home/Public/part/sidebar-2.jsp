@@ -19,7 +19,7 @@
                 <div class="about-main">
                     <div class="about-img">
                         <img src="${options.optionAboutsiteAvatar}"
-                        alt="QR Code">
+                        alt="飞鸟博客">
                     </div>
                     <div class="about-name">${options.optionAboutsiteTitle}</div>
                     <div class="about-the">

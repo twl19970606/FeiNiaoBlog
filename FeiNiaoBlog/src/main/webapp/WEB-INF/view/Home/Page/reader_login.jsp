@@ -22,7 +22,7 @@
     <style type="text/css">
         body{
             font-family: "Microsoft YaHei", Helvetica, Arial, Lucida Grande, Tahoma, sans-serif;
-            background: url(http://blogcdn.feiniao.com/img/loginBg.jpg);
+            background: url(http://localhost:8080/img/back.jpg);
             width:100%;
             height:100%;
         }
@@ -45,7 +45,7 @@
         }
 
         #backtoblog a, #nav a {
-            color: #fff !important;
+            color: #000000;
         }
 
     </style><meta name='robots' content='noindex,follow' />
@@ -62,26 +62,26 @@
 <div id="login">
     <h1><a href="/" title="欢迎您光临本站！" tabindex="-1">${options.optionSiteTitle}</a></h1>
     <%
-         String username = "";
-         String password = "";
+         String readerName = "";
+         String readerPass = "";
          //获取当前站点的所有Cookie
          Cookie[] cookies = request.getCookies();
          for (int i = 0; i < cookies.length; i++) {//对cookies中的数据进行遍历，找到用户名、密码的数据
-             if ("username".equals(cookies[i].getName())) {
-                    username = cookies[i].getValue();
-             } else if ("password".equals(cookies[i].getName())) {
-                 password = cookies[i].getValue();
+             if ("readerName".equals(cookies[i].getName())) {
+                 readerName = cookies[i].getValue();
+             } else if ("readerPass".equals(cookies[i].getName())) {
+                 readerPass = cookies[i].getValue();
              }
          }
          %>
     <form name="loginForm" id="loginForm"  method="post">
         <p>
-            <label for="user_login">用户名或电子邮件地址<br />
-                <input type="text" name="username" id="user_login" class="input" value="<%=username%>" size="20" required/></label>
+            <label for="reader_login">用户名或电子邮件地址<br />
+                <input type="text" name="readerName" id="reader_login" class="input" value="<%=readerName%>" size="20" required/></label>
         </p>
         <p>
-            <label for="user_pass">密码<br />
-                <input type="password" name="password" id="user_pass" class="input" value="<%=password%>" size="20" required/>
+            <label for="reader_pass">密码<br />
+                <input type="password" name="readerPass" id="reader_pass" class="input" value="<%=readerPass%>" size="20" required/>
             </label>
         </p>
         <p class="forgetmenot clearfix"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="1" checked /> 记住密码</label></p>
@@ -98,7 +98,7 @@
     <script type="text/javascript">
         function wp_attempt_focus(){
             setTimeout( function(){ try{
-                d = document.getElementById('user_login');
+                d = document.getElementById('reader_login');
                 d.focus();
                 d.select();
             } catch(e){}
@@ -109,7 +109,7 @@
         if(typeof wpOnload=='function')wpOnload();
     </script>
 
-    <p id="backtoblog"><a href="/">&larr; 返回到风吟博客</a></p>
+    <p id="backtoblog"><a href="/">&larr; 返回飞鸟博客</a></p>
 
 </div>
 
@@ -122,26 +122,25 @@
 
     <%--登录验证--%>
     $("#submit-btn").click(function () {
-        var user = $("#user_login").val();
-        var password = $("#user_pass").val();
+        var user = $("#reader_login").val();
+        var password = $("#reader_pass").val();
         if(user=="") {
-            alert("用户名不可为空!");
+            alert("用户名或邮箱不可为空!");
         } else if(password==""){
             alert("密码不可为空!");
         } else {
             $.ajax({
                 async: false,//同步，待请求完毕后再执行后面的代码
                 type: "POST",
-                url: '/loginVerify',
+                url: '/reader/loginVerify',
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
                 data: $("#loginForm").serialize(),
                 dataType: "json",
                 success: function (data) {
-                    if(data.code==0) {
-                        alert(data.msg);
+                    if(data.success==false) {
+                        alert(data.message);
                     } else {
-                        window.location.href="/admin";
-
+                        window.location.href="/";
                     }
                 },
                 error: function () {
