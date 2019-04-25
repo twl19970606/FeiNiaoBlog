@@ -5,6 +5,29 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
+<script src="js/jquery.min.js"></script>
+<script>
+    $(document).ready(function (){
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: 'http://wthrcdn.etouch.cn/weather_mini?city=深圳',
+            dataType: "json",
+            success:function (data) {
+                var date = data.forecast.get(0).date;
+                var city = data.city;
+                var type = data.forecast.get(0).type;
+                var high = data.forecast.get(0).high;
+                var low = data.forecast.get(0).low;
+                $("#weather").html("<div>"+date+"</div>"+"<div>"+city+"</div>"+"<div>"+type+"</div>"+"<div>"+high+"</div>"+"<div>"+low+"</div>");
+            },
+            error:function (data) {
+
+            }
+        });
+    });
+</script>
+
 <%--博客主体-右侧侧边栏 start--%>
 <div id="sidebar" class="widget-area all-sidebar"
      style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
@@ -58,6 +81,18 @@
         <div class="clear"></div>
     </aside>
     <%--关于本站 start--%>
+
+    <%--天气预报 start--%>
+    <aside class="widget">
+        <h3 class="widget-title">
+            <i class="fa fa-bars"></i>天气预报
+        </h3>
+            <div id="weather">
+                 <div class="clear"></div>
+            </div>
+        <div class="clear"></div>
+    </aside>
+    <%--天气预报 end--%>
 
     <%--网站概况 start--%>
     <aside id="php_text-22" class="widget php_text">
