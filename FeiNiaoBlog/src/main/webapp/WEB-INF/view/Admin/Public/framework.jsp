@@ -105,6 +105,7 @@
                     <dl class="layui-nav-child">
                         <dd><a href="/admin/user">全部用户</a></dd>
                         <dd><a href="/admin/user/insert">添加用户</a></dd>
+                        <dd><a href="/admin/reader">全部读者</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">

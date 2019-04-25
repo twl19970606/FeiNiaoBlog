@@ -212,7 +212,9 @@ public class IndexController {
      */
     @RequestMapping(value = "/reader/logout")
     public String logout(HttpSession session)  {
-        return  null;
+        session.removeAttribute("reader");
+        session.invalidate();
+        return "redirect:/article";
     }
 
 }

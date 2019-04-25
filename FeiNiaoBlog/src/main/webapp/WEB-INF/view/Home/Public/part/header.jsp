@@ -4,7 +4,36 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
-
+<script src="js/jquery.min.js"></script>
+<script>
+    $(document).ready(function (){
+        $('#personal').hide(); //打开页面隐藏下拉列表
+        $('#reader').hover( //鼠标滑过导航栏目时
+            function(){
+                $('#personal').show(); //显示下拉列表
+            },
+            function(){
+                $('#personal').hide(); //鼠标移开后隐藏下拉列表
+            }
+        );
+        $('#personal').hover( //鼠标滑过下拉列表自身也要显示，防止无法点击下拉列表
+            function(){
+                $('#personal').show();
+            },
+            function(){
+                $('#personal').hide(); //鼠标移开后隐藏下拉列表
+            }
+        );
+        $('person_li').hover( //鼠标滑过下拉列表是改变当前栏目样式
+            function(){
+                $(this).css({'color':'red','background-color':'orange'});
+            },
+            function(){
+                $(this).css({'color':'white','background-color':'black'});
+            }
+        );
+    });
+</script>
 <%--导航 start--%>
 <header id="masthead" class="site-header">
     <%--顶部菜单 start--%>
@@ -18,12 +47,14 @@
                     <c:otherwise>
                         <c:choose>
                             <c:when test="${sessionScope.user==null}">
-                                <a href="#"><img src="${sessionScope.reader.readerAvatar}" width="20px"
-                                                 height="20px">${sessionScope.reader.readerName}</a>
+                                <p id="reader"><img src="${sessionScope.reader.readerAvatar}" width="20px" height="20px">${sessionScope.reader.readerName}</p>
+                                <ul id="personal" style="display: none;position: absolute">
+                                    <li class="person_li" style="width:180px;height: 30px;background-color: #ffffff"><a href="">个人中心</a></li>
+                                    <li class="person_li" style="width:180px;height: 30px;"><a href="/reader/logout">登出</a></li>
+                                </ul>
                             </c:when>
                             <c:otherwise>
-                                <a href="#"><img src="${sessionScope.user.userAvatar}" width="20px"
-                                                 height="20px">${sessionScope.user.userName}</a>
+                                <img src="${sessionScope.user.userAvatar}" width="20px" height="20px">${sessionScope.user.userName}
                             </c:otherwise>
                         </c:choose>
                     </c:otherwise>
