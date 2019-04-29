@@ -8,26 +8,26 @@
 <script src="js/jquery.min.js"></script>
 <script>
     $(document).ready(function (){
-        $.ajax({
-            async: true,
-            type: "POST",
-            url: 'http://wthrcdn.etouch.cn/weather_mini?city=深圳',
-            dataType: "json",
-            success:function (data) {
-                var date = data.forecast.get(0).date;
-                var city = data.city;
-                var type = data.forecast.get(0).type;
-                var high = data.forecast.get(0).high;
-                var low = data.forecast.get(0).low;
-                $("#weather").html("<div>"+date+"</div>"+"<div>"+city+"</div>"+"<div>"+type+"</div>"+"<div>"+high+"</div>"+"<div>"+low+"</div>");
-            },
-            error:function (data) {
+        var userIp="<%=session.getAttribute("userIp")%>";
+        var userCity=null;
+        $.getJSON("http://ip.taobao.com/service/getIpInfo.php?callback=?", {ip:"183.14.16.248"}, function(data) {
+            userCity=data.data.city;
+            console.info(userCity);
+        });
 
-            }
+        $.getJSON("http://wthrcdn.etouch.cn/weather_mini?callback=?", {city:"深圳"}, function(data) {
+            var date = data.data.forecast[0].date;
+            var city = data.data.city;
+            var fengli = data.data.forecast[0].fengli;
+            var fengxiang = data.data.forecast[0].fengxiang;
+            var type = data.data.forecast[0].type;
+            var high = data.data.forecast[0].high;
+            var low = data.data.forecast[0].low;
+            $("#weather").html("<div>" +"<span>"+ city+"</span>"+"<span style='margin-left: 50px'>"+date + "</span>"+ "</div>" + "<div>" + type + "</div>" +
+                "<div>" +"<span>"+ low+"</span>"+"<span style='margin-left: 20px'>"+high + "</span>"+ "</div>"+ "<div>" +fengli+ "</div>"+"<div>" +fengxiang+ "</div>");
         });
     });
 </script>
-
 <%--博客主体-右侧侧边栏 start--%>
 <div id="sidebar" class="widget-area all-sidebar"
      style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
@@ -87,7 +87,7 @@
         <h3 class="widget-title">
             <i class="fa fa-bars"></i>天气预报
         </h3>
-            <div id="weather">
+            <div id="weather" style="padding: 20px">
                  <div class="clear"></div>
             </div>
         <div class="clear"></div>
@@ -109,9 +109,8 @@
                 <li><i class="fa fa-eye"></i> 浏览总量：${siteBasicStatistics[5]} 次</li>
                 <li><i class="fa fa-pencil-square-o"></i> 最后更新：
                     <span style="color:#2F889A">
-                                        <fmt:formatDate value="${lastUpdateArticle.articleUpdateTime}" pattern="yyyy年MM月dd日"/>
-
-                                   </span>
+                        <fmt:formatDate value="${lastUpdateArticle.articleUpdateTime}" pattern="yyyy年MM月dd日"/>
+                    </span>
                 </li>
             </ul>
         </div>

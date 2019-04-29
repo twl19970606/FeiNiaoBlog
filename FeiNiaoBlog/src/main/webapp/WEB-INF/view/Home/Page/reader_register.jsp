@@ -80,6 +80,12 @@
                 <input type="password" name="repassword" id="reader_repass" class="input" size="20" required/>
             </label>
         </p>
+        <%--<p>
+            <label for="code">请输入验证码：<br />
+                <input type="text" name="code" id="code" class="input" size="20" required/>
+            </label>
+            <img id="imgObj" alt="验证码"src="/getCode"><a href="#" onclick="changeImg()">换一张</a>
+        </p>--%>
         <p class="submit clearfix">
             <input type="button" name="wp-submit" id="submit-btn" class="button button-primary button-large" value="注册" />
         </p>
@@ -142,7 +148,7 @@
             }
         },
                 error: function () {
-                    alert("数据获取失败")
+                    alert("数据获取失败");
                 }
             })
         }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import org.springframework.cache.Cache;
 import org.springframework.cache.support.SimpleValueWrapper;
 import org.springframework.dao.DataAccessException;
@@ -82,6 +83,7 @@ public class RedisCache implements Cache {
     }
 
     private byte[] toByteArray(Object obj) {
+
         byte[] bytes = null;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {

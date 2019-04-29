@@ -46,13 +46,13 @@
             }
         }, over = function () {
             var $this = $(this), o = getOptions($this);
-            clearTimeout(o.sfTimer);
+            //clearTimeout(o.sfTimer);
             $this.siblings().superfish("hide").end().superfish("show")
         }, out = function () {
             var $this = $(this), o = getOptions($this);
             if (ios) $.proxy(close, $this, o)(); else {
-                clearTimeout(o.sfTimer);
-                o.sfTimer = setTimeout($.proxy(close, $this, o), o.delay)
+                //clearTimeout(o.sfTimer);
+                //o.sfTimer = setTimeout($.proxy(close, $this, o), o.delay);
             }
         }, close = function (o) {
             o.retainPath = $.inArray(this[0], o.$path) > -1;

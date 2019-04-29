@@ -69,6 +69,7 @@
             </td>
             <td>
                 <a href="/admin/reader/delete/${reader.readerId}" class="layui-btn layui-btn-danger layui-btn-mini" onclick="return confirmDelete()">删除</a>
+                <a href="/admin/reader/sendEmail?readerEmail=${reader.readerEmail}" class="layui-btn layui-btn-mini">发送邮件</a>
             </td>
             <td>
                 ${reader.readerId}

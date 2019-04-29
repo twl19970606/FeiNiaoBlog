@@ -4,6 +4,19 @@
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
+<style>
+    .person_li{
+        width:120px;
+        height: 30px;
+        border: 1px solid #dddddd;
+        padding-left: 10px;
+    }
+    #personal{
+        display: none;
+        position: absolute;
+        z-index: 1;
+    }
+</style>
 <script src="js/jquery.min.js"></script>
 <script>
     $(document).ready(function (){
@@ -24,12 +37,12 @@
                 $('#personal').hide(); //鼠标移开后隐藏下拉列表
             }
         );
-        $('person_li').hover( //鼠标滑过下拉列表是改变当前栏目样式
+        $('.person_li').hover( //鼠标滑过下拉列表是改变当前栏目样式
             function(){
-                $(this).css({'color':'red','background-color':'orange'});
+                $(this).css({'background-color':'#DDDDDD'});
             },
             function(){
-                $(this).css({'color':'white','background-color':'black'});
+                $(this).css({'background-color':'#FFFFFF'});
             }
         );
     });
@@ -48,9 +61,9 @@
                         <c:choose>
                             <c:when test="${sessionScope.user==null}">
                                 <p id="reader"><img src="${sessionScope.reader.readerAvatar}" width="20px" height="20px">${sessionScope.reader.readerName}</p>
-                                <ul id="personal" style="display: none;position: absolute">
-                                    <li class="person_li" style="width:180px;height: 30px;background-color: #ffffff"><a href="">个人中心</a></li>
-                                    <li class="person_li" style="width:180px;height: 30px;"><a href="/reader/logout">登出</a></li>
+                                <ul id="personal">
+                                    <li class="person_li"><a href="">个人中心</a></li>
+                                    <li class="person_li"><a href="/reader/logout">登出</a></li>
                                 </ul>
                             </c:when>
                             <c:otherwise>
